@@ -34,9 +34,8 @@ jobs:
       - name: Run nanoc build in docker
         uses: docker://ghcr.io/johanvdw/fosdem-website
         with:
-          args: |
-            bundle install
-            nanoc
+          entrypoint: /bin/sh
+          args: -c "bundle install && nanoc"
 
       # Step 5: Upload the 'output' directory as an artifact
       - name: Upload output directory
