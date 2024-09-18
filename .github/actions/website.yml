@@ -1,0 +1,44 @@
+name: Build FOSDEM site
+
+on:
+  push:
+    branches:
+      - master
+      - gha
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+
+      - name: Install dependencies
+        run: |
+          gem install bundler -v 1.17.3
+          bundle install
+      
+      - name: Copy test pretalx export
+        run: |
+          mv sample/export .
+
+      - name: Run nanoc build
+        run: |
+          nanoc build
+
+      # Step 5: Upload the 'output' directory as an artifact
+      - name: Upload output directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: nanoc-output
+          path: output
+
