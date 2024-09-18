@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          apt-get update && apt-get install -yq pngcrush imagemagick 
+          sudo apt-get update && apt-get install -yq pngcrush imagemagick 
       - name: Checkout repository
         uses: actions/checkout@v4
 
