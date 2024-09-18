@@ -10,7 +10,7 @@ on:
       - master
 
 jobs:
-  build:
+  build-nodocker:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,15 +41,14 @@ jobs:
           gem install bundler -v 1.17.3
           bundle install
 
-      # Step 4: Run Nanoc build in container
-      - name: Run Nanoc build in container
-        uses: docker://ghcr.io/johanvdw/website
-        with:
-          args: |
-            /bin/sh -c "nanoc"
+      - name: Run Nanoc
+        if: env.run-bundler == 'true'
+        run: |
+          bundle exec nanoc
 
       # Step 5: Upload the 'output' directory as an artifact
       - name: Upload output directory
+        if: env.run-bundler == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: nanoc-output
