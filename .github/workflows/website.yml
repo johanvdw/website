@@ -32,7 +32,7 @@ jobs:
           mv sample/export .
 
       - name: Run nanoc build in docker
-        uses: docker://ghcr.io/johanvdw/website
+        uses: docker://ghcr.io/johanvdw/fosdem-website
         with:
           args: |
             nanoc
