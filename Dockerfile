@@ -8,8 +8,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
       krb5-user
 
 # Copy the Gemfile in and bundle, so we have the dependencies cached
-ADD Gemfile .
-ADD Gemfile.lock .
+COPY Gemfile Gemfile.lock .
 RUN gem install bundler:1.17.3 && bundle install
 
 # Set encoding to prevent nanoc exploding
