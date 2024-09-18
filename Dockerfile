@@ -16,13 +16,10 @@ RUN gem install bundler:1.17.3 && bundle install
 ENV LANG=C.UTF-8
 ENV APP_DIR=/usr/src/app
 
-# Copy the rest of the app in
-ADD . $APP_DIR
-
 # Port 3000 is used for `nanoc view`
 EXPOSE 3000
 WORKDIR $APP_DIR
 ENTRYPOINT ["bundle", "exec"]
 
-LABEL org.opencontainers.image.source=https://github.com/FOSDEM/website
+LABEL org.opencontainers.image.source https://github.com/FOSDEM/website
 CMD ['nanoc', 'view']

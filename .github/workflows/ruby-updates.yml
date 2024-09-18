@@ -1,0 +1,57 @@
+name: Build without container (dependency changes)
+
+on:
+  push:
+    branches:
+      - master
+      - gha
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install dependencies
+        run: |
+          apt-get update && apt-get install -yq pngcrush imagemagick 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for Gemfile changes
+        id: gemfile-check
+        run: |
+          if git diff --name-only ${{ github.sha }}^ ${{ github.sha }} | grep -qE 'Gemfile.lock|Gemfile'; then
+            echo "run-bundler=true" >> $GITHUB_ENV
+          else
+            echo "run-bundler=false" >> $GITHUB_ENV
+          fi
+
+      - name: Set up Ruby
+        if: env.run-bundler == 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+
+      - name: Install dependencies
+        if: env.run-bundler == 'true'
+        run: |
+          gem install bundler -v 1.17.3
+          bundle install
+
+      # Step 4: Run Nanoc build in container
+      - name: Run Nanoc build in container
+        uses: docker://ghcr.io/johanvdw/website
+        with:
+          args: |
+            /bin/sh -c "nanoc"
+
+      # Step 5: Upload the 'output' directory as an artifact
+      - name: Upload output directory
+        uses: actions/upload-artifact@v3
+        with:
+          name: nanoc-output
+          path: output
+
