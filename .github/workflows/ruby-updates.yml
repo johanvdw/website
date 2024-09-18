@@ -37,7 +37,12 @@ jobs:
             # On pushes, compare the latest commit with the previous commit
             git diff --name-only HEAD^ HEAD | grep -qE 'Gemfile.lock|Gemfile' && echo "run-bundler=true" || echo "run-bundler=false"
           fi
-        run: echo "run-bundler=$?" >> $GITHUB_ENV
+              # Set the environment variable based on the result
+          if [ $? -eq 0 ]; then
+            echo "run-bundler=true" >> $GITHUB_ENV
+          else
+            echo "run-bundler=false" >> $GITHUB_ENV
+          fi
       - name: install dependencies
         if: env.run-bundler == 'true'
         run: |
