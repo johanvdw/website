@@ -14,9 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: install dependencies
-        run: |
-          sudo apt-get update && apt-get install -yq pngcrush imagemagick 
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -28,6 +25,10 @@ jobs:
           else
             echo "run-bundler=false" >> $GITHUB_ENV
           fi
+      - name: install dependencies
+        if: env.run-bundler == 'true'
+        run: |
+          sudo apt-get update && apt-get install -yq pngcrush imagemagick 
 
       - name: Set up Ruby
         if: env.run-bundler == 'true'
