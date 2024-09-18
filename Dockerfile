@@ -23,4 +23,6 @@ ADD . $APP_DIR
 EXPOSE 3000
 WORKDIR $APP_DIR
 ENTRYPOINT ["bundle", "exec"]
+
+LABEL org.opencontainers.image.source=https://github.com/FOSDEM/website
 CMD ['nanoc', 'view']
