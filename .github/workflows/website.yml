@@ -17,17 +17,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-          # - name: Set up Ruby
-          #   uses: ruby/setup-ruby@v1
-          #   with:
-          #     ruby-version: '2.7'
-
-          # - name: Install dependencies
-          #   run: |
-          #     gem install bundler -v 1.17.3
-          #     bundle install
-      
-      - name: Copy test pretalx export
+      - name: Copy test penta/pretalx export
         run: |
           mv sample/export .
 
@@ -39,7 +29,7 @@ jobs:
 
       # Step 5: Upload the 'output' directory as an artifact
       - name: Upload output directory
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nanoc-output
           path: output
