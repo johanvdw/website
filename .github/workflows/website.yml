@@ -20,6 +20,11 @@ jobs:
       - name: Copy test penta/pretalx export
         run: |
           mv sample/export .
+      - name: Ensure pdf_grid is set to false in config.yaml
+        run: |
+          sed -i '/^pdf_grid/d' config.yaml
+          echo "pdf_grid: false" >> config.yaml
+
 
       - name: Run nanoc build in docker
         uses: docker://ghcr.io/johanvdw/fosdem-website
